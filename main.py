@@ -59,4 +59,19 @@ def validation(text: str, *suffix: str) -> bool:
     return True
 
 
-print(validation('qwe_rty_ttt1_yyy', 'qwe', 'rty', 'ttt'))
+def example4(**param: str) -> None:
+    """
+    Семинар1, задание 4.
+
+    :param param: Списко тегов.
+    :return: Пустое значение.
+    """
+    if param.get('name') and param.get('city') and param.get('job'):
+        print(f'''Имя={param.get('name')}''')
+        print(f'''Город={param.get('city')}''')
+        print(f'''Работа={param.get('job')}''')
+    else:
+        print('Ничего')
+
+
+example4(name='Иван', city='Москва', job='АБЦТ', tyi='Блабла')
