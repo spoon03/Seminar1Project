@@ -1,6 +1,7 @@
-"""Семинар 1."""
+"""Семинар 1 Функции. Семина2. Словари."""
 
 from collections import Generator
+from data_json import json
 
 
 def my_gen_1(a: int, b: int) -> Generator:
@@ -74,4 +75,31 @@ def example4(**param: str) -> None:
         print('Ничего')
 
 
-example4(name='Иван', city='Москва', job='АБЦТ', tyi='Блабла')
+def waldo(js: dict) -> dict:
+    """
+    Семинар 2. Задание 3.
+
+    :param js: Джейсончик
+    :return: Значение Waldo
+    """
+    # Перебираем элементы словаря
+    for el, val in js.items():
+        type_val = str(type(val))
+        # Если словарь, то нужно разложить на компоненты
+        if type_val == '<class \'dict\'>':
+            # Для раскладывания опять вызываем waldo
+            result = waldo(val)
+            if result:
+                if result.get('Waldo'):
+                    return result
+        if type_val == '<class \'list\'>':
+            result = waldo(dict(enumerate(val)))
+            if result:
+                if result.get('Waldo'):
+                    return result
+        if el == 'Waldo':
+            return {el: val}
+    return {'Ничего не найдено': '(((('}
+
+
+print(waldo(json))
