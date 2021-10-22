@@ -1,6 +1,6 @@
-"""Семинар 1 Функции. Семина2. Словари."""
-
-from collections import Generator
+"""Семинар 1 Функции. Семина2. Словари. Семинар 3 Декораторы."""
+import inspect
+from typing import Any, Callable, Generator
 from data_json import json
 
 
@@ -102,4 +102,40 @@ def waldo(js: dict) -> dict:
     return {'Ничего не найдено': '(((('}
 
 
-print(waldo(json))
+def my_parametrizer(param_name: str, param_val: list) -> Callable:
+    """
+    Параметризатор для Серминара 3.
+
+    :param param_name: Имена параметров.
+    :param param_val: Значения параметров.
+    :return:
+    """
+    def decoration(func: Callable) -> Callable:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            param_orig = inspect.getfullargspec(func)[0]
+            param_get = param_name.split(',')
+            for pv in param_val:
+                param_get_true = []
+                for p_o in param_orig:
+                    param_get_true.append(pv[param_get.index(p_o)])
+                result = func(*param_get_true)
+            return result
+
+        return wrapper
+
+    return decoration
+
+
+@my_parametrizer('y,x', [(1, 2), (2, 3), (3, 4), (8, 5), (9, 6), (10, 7)])
+def test_x_lt_10(x: int, y: int) -> None:
+    """
+    Семинар 3. Задание 1.
+
+    :param x: Первый парам.
+    :param y: Второй парам.
+    :return: Ничего.
+    """
+    print(f'x={x}________y={y}')
+
+
+test_x_lt_10()
