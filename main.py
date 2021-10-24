@@ -104,7 +104,7 @@ def waldo(js: dict) -> dict:
 
 def my_parametrizer(param_name: str, param_val: list) -> Callable:
     """
-    Параметризатор для Серминара 3.
+    Параметризатор для Серминара 3.1.
 
     :param param_name: Имена параметров.
     :param param_val: Значения параметров.
@@ -138,4 +138,44 @@ def test_x_lt_10(x: int, y: int) -> None:
     print(f'x={x}________y={y}')
 
 
-test_x_lt_10()
+def input_validator_with_params(validate: Callable) -> Callable:
+    """
+    Декоратор для Семинар 3.2.
+
+    :param validate: Функция которая валидирует.
+    :return: Возвращаем результат func.
+    """
+    def decoration(func: Callable) -> Callable:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            for atr, val in kwargs.items():
+                if atr == 'x':
+                    if not (validate(val)):
+                        print(f'что то пошло не так:{atr} = {val}')
+                        result = None
+                    else:
+                        result = func(*args, **kwargs)
+            return result
+
+        return wrapper
+
+    return decoration
+
+
+def validate_input_x(x: int) -> bool:
+    return x != 0
+
+
+@input_validator_with_params(validate=validate_input_x)
+def div(y: int, x: int) -> float:
+    """
+    Функция валидации для Семинар 3.2.
+
+    :param y:
+    :param x:
+    :return:
+    """
+    result = y / x
+    return result
+
+
+print(div(x=0, y=1))
